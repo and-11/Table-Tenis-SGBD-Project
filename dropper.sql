@@ -1,0 +1,9 @@
+DROP TABLE Contract_sponsorizare;
+DROP TABLE Contract_antrenor;
+DROP TABLE Meci;
+DROP TABLE Paleta;
+DROP TABLE Sponsor;
+DROP TABLE Antrenor;
+DROP TABLE Arbitru;
+DROP TABLE Jucator;
+DROP TABLE Turneu;
