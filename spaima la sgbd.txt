@@ -1,0 +1,25 @@
+
+
+pas: tenis
+
+
+
+td: 
+
+istoric antrenori
+
+triger data inceput < data finala
+
+
+
+
+
+de facut descriere si intrari in tabele
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------
+
