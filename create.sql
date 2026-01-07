@@ -1,5 +1,12 @@
 -- Creeare Tabele
 
+CREATE TABLE Sala (
+    sala_id INT PRIMARY KEY,
+    nume_sala VARCHAR(100),
+    oras VARCHAR(100),
+    capacitate INT
+);
+
 -- 1. Tabelul Turneu 
 CREATE TABLE Turneu (
     turneu_id INT PRIMARY KEY,
@@ -38,17 +45,21 @@ CREATE TABLE Paleta (
 -- 5. Tabelul Meci 
 CREATE TABLE Meci (
     meci_id INT PRIMARY KEY,
-    jucator_unu INT,
-    jucator_doi INT,
-    turneu_id INT,
-    arbitru_id INT,
-    locatie VARCHAR(100),
+    jucator_unu INT NOT NULL,
+    jucator_doi INT NOT NULL,
+    turneu_id INT NOT NULL,
+    arbitru_id INT NOT NULL,
+    sala_id INT NOT NULL,
     data DATE,
     FOREIGN KEY (jucator_unu) REFERENCES Jucator(jucator_id),
     FOREIGN KEY (jucator_doi) REFERENCES Jucator(jucator_id),
     FOREIGN KEY (turneu_id) REFERENCES Turneu(turneu_id),
-    FOREIGN KEY (arbitru_id) REFERENCES Arbitru(arbitru_id)
+    FOREIGN KEY (arbitru_id) REFERENCES Arbitru(arbitru_id),
+    FOREIGN KEY (sala_id) REFERENCES Sala(sala_id)
 );
+
+
+
 
 -- 6. Tabelul Antrenor
 CREATE TABLE Antrenor (
@@ -84,4 +95,6 @@ CREATE TABLE Contract_sponsorizare (
     FOREIGN KEY (jucator_id) REFERENCES Jucator(jucator_id),
     FOREIGN KEY (sponsor_id) REFERENCES Sponsor(sponsor_id)
 );
+
+
 
