@@ -1,30 +1,4 @@
 
--- Task 10
---Scopul acestui trigger este de a asigura respectarea unei reguli de business la nivelul bazei de date, conform c?reia un juc?tor nu poate avea mai mult de cinci contracte de sponsorizare active simultan, prin verificarea global? a num?rului de sponsori asocia?i fiec?rui juc?tor dup? executarea unei comenzi de tip INSERT sau UPDATE, prevenind astfel introducerea sau modificarea unor date care ar înc?lca aceast? regul? ?i men?inând integritatea ?i coeren?a informa?iilor din sistem.
-CREATE OR REPLACE TRIGGER trg_limitare_sponsori
-AFTER INSERT OR UPDATE ON Contract_sponsorizare
-DECLARE
-    v_nr NUMBER;
-BEGIN
-    SELECT COUNT(*)
-    INTO v_nr
-    FROM (
-        SELECT jucator_id
-        FROM Contract_sponsorizare
-        GROUP BY jucator_id
-        HAVING COUNT(sponsor_id) > 5
-    );
-
-    IF v_nr > 0 THEN
-        RAISE_APPLICATION_ERROR(
-            -20001,
-            'Un jucator nu poate avea mai mult de 5 sponsori activi.'
-        );
-    END IF;
-END;
-/
-
-
 
 --Sponsorul trebuie sa dea o val pozitiva
 CREATE OR REPLACE TRIGGER trg_ValideazaSumaSponsor
@@ -37,23 +11,7 @@ BEGIN
 END;
 /
 
-
-
-
-
-
-
-
-
-
-
-
-
-
---test all below
-
--- Trigers
-
+--turneul trebuie sa aiba data valida
 CREATE OR REPLACE TRIGGER trg_ValideazaDateTurneu
 BEFORE INSERT OR UPDATE ON Turneu
 FOR EACH ROW
@@ -64,14 +22,65 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE TRIGGER trg_contract_antrenor_perioada
+BEFORE INSERT OR UPDATE ON Contract_antrenor
+FOR EACH ROW
+BEGIN
+    IF :NEW.data_inceput >= :NEW.data_final THEN
+        RAISE_APPLICATION_ERROR(
+            -20002,
+            'Data de inceput a contractului trebuie sa fie anterioara datei de final.'
+        );
+    END IF;
+END;
+/
+
+
 CREATE OR REPLACE TRIGGER trg_EvitaAutoMeci
 BEFORE INSERT OR UPDATE ON Meci
 FOR EACH ROW
 BEGIN
     IF :NEW.jucator_unu = :NEW.jucator_doi THEN
-        RAISE_APPLICATION_ERROR(-20002, 'Eroare: Un jucator nu poate juca impotriva lui insusi.');
+        RAISE_APPLICATION_ERROR(-20004, 'Eroare: Un jucator nu poate juca impotriva lui insusi.');
     END IF;
 END;
 /
+
+
+
+CREATE OR REPLACE TRIGGER trg_limitare_sponsori_stmt
+BEFORE INSERT OR UPDATE ON Contract_sponsorizare
+DECLARE
+    c_max_sponsori CONSTANT NUMBER := 5;
+    v_count        NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM (
+        SELECT jucator_id
+        FROM Contract_sponsorizare
+        GROUP BY jucator_id
+        HAVING COUNT(*) > c_max_sponsori
+    );
+
+    IF v_count > 0 THEN
+        RAISE_APPLICATION_ERROR(
+            -20005,
+            'Eroare: Un jucator nu poate avea mai mult de '
+            || c_max_sponsori
+            || ' contracte de sponsorizare.'
+        );
+    END IF;
+END;
+/
+
+
+
+
+
+
+
+
+
 
 
