@@ -1,6 +1,7 @@
 
 
-
+select * from Contract_sponsorizare;
+drop table Contract_sponsorizare;
 
 select * from turneu;
 

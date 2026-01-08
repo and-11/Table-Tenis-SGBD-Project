@@ -56,7 +56,7 @@ CREATE TABLE Meci (
     FOREIGN KEY (turneu_id) REFERENCES Turneu(turneu_id),
     FOREIGN KEY (arbitru_id) REFERENCES Arbitru(arbitru_id),
     FOREIGN KEY (sala_id) REFERENCES Sala(sala_id),
-    CONSTRAINT chk_jucatori_diferiti CHECK (jucator_unu <> jucator_doi)
+    CONSTRAINT chk_jucatori_diferiti CHECK (jucator_unu != jucator_doi)
 );
 
 -- 6. Tabelul Antrenor
@@ -91,7 +91,9 @@ CREATE TABLE Contract_sponsorizare (
     suma NUMBER(10, 2) NOT NULL,
     PRIMARY KEY (jucator_id, sponsor_id),
     FOREIGN KEY (jucator_id) REFERENCES Jucator(jucator_id),
-    FOREIGN KEY (sponsor_id) REFERENCES Sponsor(sponsor_id)
+    FOREIGN KEY (sponsor_id) REFERENCES Sponsor(sponsor_id),
+    CONSTRAINT suma_pozitiva CHECK (suma >= 0)
+    
 );
 
 
