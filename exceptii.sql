@@ -12,17 +12,33 @@ CREATE OR REPLACE FUNCTION capacitate_maxima_sala_jucator_turneu (
 ) RETURN NUMBER
 IS
     v_capacitate Sala.capacitate%TYPE;
-    v_dummy      NUMBER;
+    v_dummy      NUMBER(1);
+
+    -- Excep?ii proprii
+    e_jucator_inexistent EXCEPTION;
+    e_turneu_inexistent  EXCEPTION;
 BEGIN
     -- Verificare existenta jucator
-    SELECT 1 INTO v_dummy
-    FROM Jucator
-    WHERE jucator_id = p_jucator_id;
+    BEGIN
+        SELECT 1
+        INTO v_dummy
+        FROM Jucator
+        WHERE jucator_id = p_jucator_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE e_jucator_inexistent;
+    END;
 
     -- Verificare existenta turneu
-    SELECT 1 INTO v_dummy
-    FROM Turneu
-    WHERE turneu_id = p_turneu_id;
+    BEGIN
+        SELECT 1
+        INTO v_dummy
+        FROM Turneu
+        WHERE turneu_id = p_turneu_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE e_turneu_inexistent;
+    END;
 
     -- Determinare capacitate maxima (3 tabele, un singur SQL)
     SELECT MAX(s.capacitate)
@@ -41,25 +57,38 @@ BEGIN
     RETURN v_capacitate;
 
 EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE(
-            'Nu exista jucatorul, turneul sau jucatorul nu a disputat meciuri in turneul specificat.'
+    WHEN e_jucator_inexistent THEN
+        RAISE_APPLICATION_ERROR(
+            -20012,
+            'Jucatorul specificat nu exista.'
         );
-        RETURN NULL;
+
+    WHEN e_turneu_inexistent THEN
+        RAISE_APPLICATION_ERROR(
+            -20013,
+            'Turneul specificat nu exista.'
+        );
+
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(
+            -20014,
+            'Jucatorul nu a disputat niciun meci in turneul specificat.'
+        );
 
     WHEN TOO_MANY_ROWS THEN
-        DBMS_OUTPUT.PUT_LINE(
+        RAISE_APPLICATION_ERROR(
+            -20015,
             'Exista mai multe valori posibile pentru capacitatea salii.'
         );
-        RETURN NULL;
 
     WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE(
+        RAISE_APPLICATION_ERROR(
+            -20016,
             'Eroare neasteptata: ' || SQLERRM
         );
-        RETURN NULL;
 END;
 /
+
 
 
 

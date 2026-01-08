@@ -32,15 +32,18 @@ select * from contract_sponsorizare;
 
 insert into jucator values( 100, 'Stefan', 'Busoi', 'Macedonia');
 -- 100 
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('Test! MULTI-INSERT');
-    INSERT INTO contract_sponsorizare(jucator_id, sponsor_id, suma)
-    SELECT 100 + ROWNUM, 501, 2, SYSDATE, NULL, 'Bulk Misiune ' || ROWNUM
-    FROM dual CONNECT BY LEVEL <= 50;
-    DBMS_OUTPUT.PUT_LINE('Insert realizat cu succes.');
-    ROLLBACK;
-END;
-/
+
+
+
+ INSERT ALL
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 101, 15)
+    INTO contract_sponsorizare(jucator_id, sponsor_id, suma) VALUES (100, 102, 15)
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 103, 15)
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 104, 15)
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 105, 15)
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 106, 15)
+SELECT * FROM dual;
+
 
 
 --ex 11
