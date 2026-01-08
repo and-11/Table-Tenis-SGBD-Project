@@ -1,4 +1,5 @@
 --ex 10
+--un jucator nu are voie mai multi de 5 sponsori
 CREATE OR REPLACE TRIGGER trg_limitare_sponsori_stmt
 AFTER INSERT OR UPDATE ON Contract_sponsorizare
 DECLARE
@@ -40,5 +41,19 @@ END;
 /
 
 
-
+--ex 12
+-- tabela cu contractele de sponsorizare nu poate fi stearsa
+CREATE OR REPLACE TRIGGER trg_drop_Contract_Sponsorizare
+BEFORE DROP ON SCHEMA
+BEGIN
+    IF ORA_DICT_OBJ_TYPE = 'TABLE'
+        AND ORA_DICT_OBJ_NAME = 'CONTRACT_SPONSORIZARE'
+    THEN
+        RAISE_APPLICATION_ERROR(
+            -20006,
+            'Eroare: Tabela Contract_Sponsorizare nu poate fi stearsa.'
+        );
+    END IF;
+END;
+/
 
