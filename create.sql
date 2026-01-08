@@ -88,7 +88,7 @@ CREATE TABLE Contract_antrenor (
 CREATE TABLE Contract_sponsorizare (
     jucator_id NUMBER(10),
     sponsor_id NUMBER(10),
-    suma NUMBER(10, 2) NOT NULL,
+    suma NUMBER( 10, 2) NOT NULL,
     PRIMARY KEY (jucator_id, sponsor_id),
     FOREIGN KEY (jucator_id) REFERENCES Jucator(jucator_id),
     FOREIGN KEY (sponsor_id) REFERENCES Sponsor(sponsor_id),
