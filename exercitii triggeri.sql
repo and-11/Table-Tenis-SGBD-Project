@@ -26,6 +26,21 @@ BEGIN
 END;
 /
 
+select * from sponsor;
+select * from jucator;
+select * from contract_sponsorizare;
+
+insert into jucator values( 100, 'Stefan', 'Busoi', 'Macedonia');
+-- 100 
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Test! MULTI-INSERT');
+    INSERT INTO contract_sponsorizare(jucator_id, sponsor_id, suma)
+    SELECT 100 + ROWNUM, 501, 2, SYSDATE, NULL, 'Bulk Misiune ' || ROWNUM
+    FROM dual CONNECT BY LEVEL <= 50;
+    DBMS_OUTPUT.PUT_LINE('Insert realizat cu succes.');
+    ROLLBACK;
+END;
+/
 
 
 --ex 11
@@ -53,7 +68,11 @@ BEGIN
             -20006,
             'Eroare: Tabela Contract_Sponsorizare nu poate fi stearsa.'
         );
+        
     END IF;
 END;
 /
+
+
+drop trigger trg_drop_paleta_dupa_22;
 

@@ -4,7 +4,8 @@ CREATE TABLE Sala (
     sala_id NUMBER(10) PRIMARY KEY,
     nume_sala VARCHAR(100) NOT NULL,
     oras VARCHAR(100) NOT NULL,
-    capacitate NUMBER(10) NOT NULL
+    capacitate NUMBER(10) NOT NULL,
+    CONSTRAINT chk_capacitate CHECK(capacitate > 0)
 );
 
 -- 1. Tabelul Turneu 

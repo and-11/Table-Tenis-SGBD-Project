@@ -4,8 +4,8 @@
 CREATE OR REPLACE PROCEDURE analiza_sponsorizari_turneu (
     p_turneu_id IN Turneu.turneu_id%TYPE
 ) IS
-    -- 1. VARRAY: lista sponsorilor (maxim 5)
-    TYPE t_sponsori_varray IS VARRAY(5) OF Sponsor.nume%TYPE;
+    -- 1. VARRAY: lista sponsorilor 
+    TYPE t_sponsori_varray IS VARRAY(1000) OF Sponsor.nume%TYPE;
     v_sponsori t_sponsori_varray;
 
     -- 2. Nested table: valorile sponsoriz?rilor

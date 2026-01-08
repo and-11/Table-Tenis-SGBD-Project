@@ -21,11 +21,12 @@ IS
 
 BEGIN
     FOR t IN c_turnee LOOP
+    DBMS_OUTPUT.PUT_LINE('');
         DBMS_OUTPUT.PUT_LINE('Turneu: ' || t.nume_turneu);
 
         FOR m IN c_meciuri(t.turneu_id) LOOP
             DBMS_OUTPUT.PUT_LINE(
-                '  Meci ' || m.meci_id || ': ' ||
+                '  Meci id' || m.meci_id || ': ' ||
                 m.jucator_1 || ' vs ' || m.jucator_2 ||
                 ' | Arbitru: ' || m.arbitru
             );
