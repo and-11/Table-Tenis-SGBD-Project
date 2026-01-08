@@ -2,7 +2,7 @@
 
 CREATE TABLE Sala (
     sala_id NUMBER(10) PRIMARY KEY,
-    nume_sala VARCHAR(100),
+    nume_sala VARCHAR(100) NOT NULL,
     oras VARCHAR(100) NOT NULL,
     capacitate NUMBER(10) NOT NULL
 );
@@ -54,7 +54,8 @@ CREATE TABLE Meci (
     FOREIGN KEY (jucator_doi) REFERENCES Jucator(jucator_id),
     FOREIGN KEY (turneu_id) REFERENCES Turneu(turneu_id),
     FOREIGN KEY (arbitru_id) REFERENCES Arbitru(arbitru_id),
-    FOREIGN KEY (sala_id) REFERENCES Sala(sala_id)
+    FOREIGN KEY (sala_id) REFERENCES Sala(sala_id),
+    CONSTRAINT chk_jucatori_diferiti CHECK (jucator_unu <> jucator_doi)
 );
 
 -- 6. Tabelul Antrenor
