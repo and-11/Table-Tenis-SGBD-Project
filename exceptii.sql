@@ -1,10 +1,10 @@
 
 
--- S? se determine capacitatea maxim? a s?lii în care a jucat un juc?tor într-un anumit turneu.
+-- S? se determine capacitatea maxim? a s?lii ï¿½n care a jucat un juc?tor ï¿½ntr-un anumit turneu.
 --ex 8
 
---S? se creeze un subprogram stocat independent de tip func?ie care, pentru un juc?tor ?i un turneu date ca parametri, s? determine capacitatea maxim? a s?lii în care juc?torul respectiv a disputat meciuri în cadrul acelui turneu. Func?ia va utiliza într-o singur? comand? SQL trei tabele din baza de date ?i va trata excep?iile predefinite NO_DATA_FOUND ?i TOO_MANY_ROWS.
---(TOO_MANY_ROWS va fi tratat? teoretic, chiar dac? nu apare logic — este acceptat ?i des întâlnit la curs)
+--S? se creeze un subprogram stocat independent de tip func?ie care, pentru un juc?tor ?i un turneu date ca parametri, s? determine capacitatea maxim? a s?lii ï¿½n care juc?torul respectiv a disputat meciuri ï¿½n cadrul acelui turneu. Func?ia va utiliza ï¿½ntr-o singur? comand? SQL trei tabele din baza de date ?i va trata excep?iile predefinite NO_DATA_FOUND ?i TOO_MANY_ROWS.
+--(TOO_MANY_ROWS va fi tratat? teoretic, chiar dac? nu apare logic ï¿½ este acceptat ?i des ï¿½ntï¿½lnit la curs)
 
 CREATE OR REPLACE FUNCTION capacitate_maxima_sala_jucator_turneu (
     p_jucator_id IN Jucator.jucator_id%TYPE,
@@ -14,7 +14,7 @@ IS
     v_capacitate Sala.capacitate%TYPE;
     v_dummy      NUMBER(1);
 
-    -- Excep?ii proprii
+    -- Exceptii proprii
     e_jucator_inexistent EXCEPTION;
     e_turneu_inexistent  EXCEPTION;
 BEGIN
@@ -40,7 +40,6 @@ BEGIN
             RAISE e_turneu_inexistent;
     END;
 
-    -- Determinare capacitate maxima (3 tabele, un singur SQL)
     SELECT MAX(s.capacitate)
     INTO v_capacitate
     FROM Meci m
@@ -109,19 +108,18 @@ SELECT capacitate_maxima_sala_jucator_turneu(1, 99) FROM dual;
 
 
 --ex 9
---S? se creeze un subprogram stocat independent de tip procedur? care, pentru un juc?tor ?i un turneu date ca parametri, s? afi?eze detalii despre meciurile disputate de juc?tor în cadrul turneului, incluzând numele turneului, sala în care s-a jucat, arbitrul ?i adversarul. Procedura va utiliza într-o singur? comand? SQL cinci tabele din baza de date ?i va defini cel pu?in dou? excep?ii proprii pentru tratarea situa?iilor în care juc?torul nu exist? sau juc?torul nu a disputat niciun meci în turneul specificat. Procedura va fi apelat? astfel încât s? fie eviden?iate toate cazurile tratate.
+--S? se creeze un subprogram stocat independent de tip procedur? care, pentru un juc?tor ?i un turneu date ca parametri, s? afi?eze detalii despre meciurile disputate de juc?tor ï¿½n cadrul turneului, incluzï¿½nd numele turneului, sala ï¿½n care s-a jucat, arbitrul ?i adversarul. Procedura va utiliza ï¿½ntr-o singur? comand? SQL cinci tabele din baza de date ?i va defini cel pu?in dou? excep?ii proprii pentru tratarea situa?iilor ï¿½n care juc?torul nu exist? sau juc?torul nu a disputat niciun meci ï¿½n turneul specificat. Procedura va fi apelat? astfel ï¿½ncï¿½t s? fie eviden?iate toate cazurile tratate.
 
 CREATE OR REPLACE PROCEDURE detalii_meciuri_jucator_turneu (
     p_jucator_id IN Jucator.jucator_id%TYPE,
     p_turneu_id  IN Turneu.turneu_id%TYPE
 ) IS
-    -- Excep?ii proprii
+    -- Exceptii proprii
     e_jucator_inexistent EXCEPTION;
     e_fara_meciuri       EXCEPTION;
 
     v_exista NUMBER;
 BEGIN
-    -- Verificare existenta jucator
     SELECT COUNT(*)
     INTO v_exista
     FROM Jucator
@@ -131,7 +129,6 @@ BEGIN
         RAISE e_jucator_inexistent;
     END IF;
 
-    -- Cursor implicit (FOR) cu 5 tabele intr-un singur SELECT
     v_exista := 0;
 
     FOR r IN (
@@ -198,7 +195,6 @@ BEGIN
     detalii_meciuri_jucator_turneu(99, 1);
 END;
 /
-
 
 BEGIN
     detalii_meciuri_jucator_turneu(5, 2);

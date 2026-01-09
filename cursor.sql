@@ -1,4 +1,4 @@
---S? se creeze un subprogram stocat independent care, pentru fiecare turneu, s? afi?eze meciurile desf??urate în cadrul acestuia. Pentru fiecare meci se vor afi?a juc?torii participan?i ?i arbitrul. Subprogramul va utiliza dou? tipuri diferite de cursoare: un cursor explicit pentru parcurgerea turneelor ?i un cursor parametrizat, dependent de primul, pentru parcurgerea meciurilor fiec?rui turneu.
+--S? se creeze un subprogram stocat independent care, pentru fiecare turneu, s? afi?eze meciurile desf??urate ï¿½n cadrul acestuia. Pentru fiecare meci se vor afi?a juc?torii participan?i ?i arbitrul. Subprogramul va utiliza dou? tipuri diferite de cursoare: un cursor explicit pentru parcurgerea turneelor ?i un cursor parametrizat, dependent de primul, pentru parcurgerea meciurilor fiec?rui turneu.
 --ex 7
 CREATE OR REPLACE PROCEDURE afisare_meciuri_turnee
 IS

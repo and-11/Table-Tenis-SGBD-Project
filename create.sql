@@ -92,9 +92,7 @@ CREATE TABLE Contract_sponsorizare (
     PRIMARY KEY (jucator_id, sponsor_id),
     FOREIGN KEY (jucator_id) REFERENCES Jucator(jucator_id),
     FOREIGN KEY (sponsor_id) REFERENCES Sponsor(sponsor_id),
-    CONSTRAINT suma_pozitiva CHECK (suma >= 0)
     
 );
 
-
-
+COMMIT;

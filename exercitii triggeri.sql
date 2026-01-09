@@ -30,7 +30,7 @@ select * from sponsor;
 select * from jucator;
 select * from contract_sponsorizare;
 
-insert into jucator values( 100, 'Stefan', 'Busoi', 'Macedonia');
+insert into jucator values( 100, 'Stefan', 'B', 'Macedonia');
 -- 100 
 
 
@@ -58,6 +58,31 @@ BEGIN
 END;
 /
 
+select * from contract_sponsorizare;
+
+-- INSERT care MERGE
+INSERT INTO Contract_sponsorizare (jucator_id, sponsor_id, suma)
+VALUES (2, 105, 500);
+
+
+-- UPDATE care NU MERGE
+UPDATE Contract_sponsorizare
+SET suma = -100
+WHERE jucator_id = 1
+  AND sponsor_id = 101;
+
+
+-- INSERT care NU MERGE
+INSERT INTO Contract_sponsorizare (jucator_id, sponsor_id, suma)
+VALUES (2, 102, -1);
+
+
+-- MULTI-INSERT care NU MERGE
+INSERT ALL
+    INTO Contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (3, 105, 200)
+    INTO Contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (3, 104, -50)
+SELECT * FROM dual;
+select * from Contract_sponsorizare ;
 
 --ex 12
 -- tabela cu contractele de sponsorizare nu poate fi stearsa
@@ -76,6 +101,9 @@ BEGIN
 END;
 /
 
+drop table Contract_Sponsorizare;
 
-drop trigger trg_drop_paleta_dupa_22;
+
+drop trigger trg_drop_Contract_Sponsorizare;
+
 
