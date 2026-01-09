@@ -1,12 +1,8 @@
---S? se creeze un pachet PL/SQL care s? gestioneze participarea juc?torilor la turnee, incluzând analiza meciurilor ?i a sponsoriz?rilor acestora. Pachetul va defini tipuri de date complexe pentru stocarea informa?iilor despre meciuri ?i sponsoriz?ri, precum ?i func?ii ?i proceduri care s? permit? verificarea existen?ei unui juc?tor, calcularea totalului sponsoriz?rilor ?i afi?area detaliilor complete ale particip?rii unui juc?tor într-un turneu. Pachetul va asigura un flux de ac?iuni integrate, specifice bazei de date definite.
-
-
+--13
 CREATE OR REPLACE PACKAGE pkg_gestiune_turnee IS
 
-    -- Tip de date complex: lista de sume
     TYPE t_sume_nt IS TABLE OF NUMBER;
 
-    -- Tip de date complex: detalii meci
     TYPE t_meci_rec IS RECORD (
         adversar VARCHAR2(100),
         arbitru  VARCHAR2(100),
@@ -15,7 +11,6 @@ CREATE OR REPLACE PACKAGE pkg_gestiune_turnee IS
 
     TYPE t_meciuri_nt IS TABLE OF t_meci_rec;
 
-    -- Functii
     FUNCTION exista_jucator (
         p_jucator_id IN Jucator.jucator_id%TYPE
     ) RETURN BOOLEAN;
@@ -24,7 +19,6 @@ CREATE OR REPLACE PACKAGE pkg_gestiune_turnee IS
         p_jucator_id IN Jucator.jucator_id%TYPE
     ) RETURN NUMBER;
 
-    -- Proceduri
     PROCEDURE afisare_sponsorizari (
         p_jucator_id IN Jucator.jucator_id%TYPE
     );
@@ -36,9 +30,6 @@ CREATE OR REPLACE PACKAGE pkg_gestiune_turnee IS
 
 END pkg_gestiune_turnee;
 /
-
-
-
 
 
 CREATE OR REPLACE PACKAGE BODY pkg_gestiune_turnee IS

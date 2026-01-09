@@ -1,0 +1,974 @@
+-- Creeare Tabele
+-- 0. Tabela Sala
+CREATE TABLE Sala (
+    sala_id NUMBER(10) PRIMARY KEY,
+    nume_sala VARCHAR(100) NOT NULL,
+    oras VARCHAR(100) NOT NULL,
+    capacitate NUMBER(10) NOT NULL,
+    CONSTRAINT chk_capacitate CHECK(capacitate > 0)
+);
+
+-- 1. Tabelul Turneu 
+CREATE TABLE Turneu (
+    turneu_id NUMBER(10) PRIMARY KEY,
+    nume_turneu VARCHAR(100) NOT NULL,
+    data_inceput DATE NOT NULL,
+    data_final DATE NOT NULL
+);
+
+-- 2. Tabelul Arbitru
+CREATE TABLE Arbitru (
+    arbitru_id NUMBER(10) PRIMARY KEY,
+    nume VARCHAR(50) NOT NULL,
+    prenume VARCHAR(50) NOT NULL,
+    nationalitate VARCHAR(50) NOT NULL
+);
+
+-- 3. Tabelul Jucator
+CREATE TABLE Jucator (
+    jucator_id NUMBER(10) PRIMARY KEY,
+    nume VARCHAR(50) NOT NULL,
+    prenume VARCHAR(50) NOT NULL,
+    nationalitate VARCHAR(50) NOT NULL
+);
+
+-- 4. Tabelul Paleta 
+CREATE TABLE Paleta (
+    paleta_id NUMBER(10) PRIMARY KEY,
+    jucator_id NUMBER(10),
+    tip_lemn VARCHAR(50) NOT NULL,
+    tip_cauciuc_negru VARCHAR(50) NOT NULL,
+    tip_cauciuc_rosu VARCHAR(50) NOT NULL,
+    FOREIGN KEY (jucator_id) REFERENCES Jucator(jucator_id)
+);
+
+-- 5. Tabelul Meci 
+CREATE TABLE Meci (
+    meci_id NUMBER(10) PRIMARY KEY,
+    jucator_unu NUMBER(10) NOT NULL,
+    jucator_doi NUMBER(10) NOT NULL,
+    turneu_id NUMBER(10) NOT NULL,
+    arbitru_id NUMBER(10) NOT NULL,
+    sala_id NUMBER(10) NOT NULL,
+    data DATE NOT NULL,
+    FOREIGN KEY (jucator_unu) REFERENCES Jucator(jucator_id),
+    FOREIGN KEY (jucator_doi) REFERENCES Jucator(jucator_id),
+    FOREIGN KEY (turneu_id) REFERENCES Turneu(turneu_id),
+    FOREIGN KEY (arbitru_id) REFERENCES Arbitru(arbitru_id),
+    FOREIGN KEY (sala_id) REFERENCES Sala(sala_id),
+    CONSTRAINT chk_jucatori_diferiti CHECK (jucator_unu != jucator_doi)
+);
+
+-- 6. Tabelul Antrenor
+CREATE TABLE Antrenor (
+    antrenor_id NUMBER(10) PRIMARY KEY,
+    nume VARCHAR(50) NOT NULL,
+    prenume VARCHAR(50) NOT NULL,
+    nationalitate VARCHAR(50) NOT NULL
+);
+
+-- 7. Tabelul Sponsor
+CREATE TABLE Sponsor (
+    sponsor_id NUMBER(10) PRIMARY KEY,
+    nume VARCHAR(100) NOT NULL
+);
+
+-- 8. Tabelul Contract_antrenor
+CREATE TABLE Contract_antrenor (
+    antrenor_id NUMBER(10),
+    jucator_id NUMBER(10),
+    data_inceput DATE NOT NULL,
+    data_final DATE NOT NULL,
+    PRIMARY KEY (antrenor_id, jucator_id),
+    FOREIGN KEY (antrenor_id) REFERENCES Antrenor(antrenor_id),
+    FOREIGN KEY (jucator_id) REFERENCES Jucator(jucator_id)
+);
+
+-- 9. Tabelul Contract_sponsorizare
+CREATE TABLE Contract_sponsorizare (
+    jucator_id NUMBER(10),
+    sponsor_id NUMBER(10),
+    suma NUMBER( 10, 2) NOT NULL,
+    PRIMARY KEY (jucator_id, sponsor_id),
+    FOREIGN KEY (jucator_id) REFERENCES Jucator(jucator_id),
+    FOREIGN KEY (sponsor_id) REFERENCES Sponsor(sponsor_id),
+    
+);
+
+COMMIT;
+
+
+DROP TABLE Contract_sponsorizare CASCADE CONSTRAINTS;
+DROP TABLE Contract_antrenor CASCADE CONSTRAINTS;
+DROP TABLE Meci CASCADE CONSTRAINTS;
+DROP TABLE Paleta CASCADE CONSTRAINTS;
+DROP TABLE Sponsor CASCADE CONSTRAINTS;
+DROP TABLE Antrenor CASCADE CONSTRAINTS;
+DROP TABLE Arbitru CASCADE CONSTRAINTS;
+DROP TABLE Jucator CASCADE CONSTRAINTS;
+DROP TABLE Turneu CASCADE CONSTRAINTS;
+DROP TABLE Sala CASCADE CONSTRAINTS;
+
+
+-- SALA
+INSERT INTO Sala VALUES (1, 'Sala Polivalenta Bucuresti', 'Bucuresti', 5000);
+INSERT INTO Sala VALUES (2, 'BT Arena', 'Cluj-Napoca', 10000);
+INSERT INTO Sala VALUES (3, 'Sala Polivalenta Cluj', 'Cluj-Napoca', 3000);
+INSERT INTO Sala VALUES (4, 'Sala Sporturilor', 'Brasov', 2500);
+INSERT INTO Sala VALUES (5, 'Sala Olimpia', 'Ploiesti', 4000);
+
+-- TURNEU
+INSERT INTO Turneu VALUES (1, 'Campionatul National',
+    TO_DATE('10-03-2025','DD-MM-YYYY'),
+    TO_DATE('15-03-2025','DD-MM-YYYY'));
+INSERT INTO Turneu VALUES (2, 'Cupa Romaniei',
+    TO_DATE('01-04-2025','DD-MM-YYYY'),
+    TO_DATE('05-04-2025','DD-MM-YYYY'));
+INSERT INTO Turneu VALUES (3, 'Open Bucuresti',
+    TO_DATE('20-05-2025','DD-MM-YYYY'),
+    TO_DATE('25-05-2025','DD-MM-YYYY'));
+INSERT INTO Turneu VALUES (4, 'European Challenge',
+    TO_DATE('10-06-2025','DD-MM-YYYY'),
+    TO_DATE('15-06-2025','DD-MM-YYYY'));
+INSERT INTO Turneu VALUES (5, 'World Series',
+    TO_DATE('01-07-2025','DD-MM-YYYY'),
+    TO_DATE('06-07-2025','DD-MM-YYYY'));
+
+-- ARBITRU
+INSERT INTO Arbitru VALUES (1, 'Popescu', 'Ion', 'Romania');
+INSERT INTO Arbitru VALUES (2, 'Ionescu', 'Mihai', 'Romania');
+INSERT INTO Arbitru VALUES (3, 'Nikolaidis', 'Petros', 'Grecia');
+INSERT INTO Arbitru VALUES (4, 'Rossi', 'Marco', 'Italia');
+INSERT INTO Arbitru VALUES (5, 'Muller', 'Hans', 'Germania');
+
+-- JUCATOR
+INSERT INTO Jucator VALUES (1, 'Gabriel', 'Balaceanu-Nadal', 'Grecia');
+INSERT INTO Jucator VALUES (2, 'Andrei', 'Popescu', 'Romania');
+INSERT INTO Jucator VALUES (3, 'Mihai', 'Ionescu', 'Romania');
+INSERT INTO Jucator VALUES (4, 'Stefan', 'Marinescu', 'Romania');
+INSERT INTO Jucator VALUES (5, 'Alexandru', 'Dumitru', 'Romania');
+
+-- ANTRENOR
+INSERT INTO Antrenor VALUES (1, 'Ion', 'Georgescu', 'Romania');
+INSERT INTO Antrenor VALUES (2, 'Vasile', 'Iordan', 'Romania');
+INSERT INTO Antrenor VALUES (3, 'Petros', 'Nikolaidis', 'Grecia');
+INSERT INTO Antrenor VALUES (4, 'Marco', 'Rossi', 'Italia');
+INSERT INTO Antrenor VALUES (5, 'Hans', 'Muller', 'Germania');
+
+-- SPONSOR
+INSERT INTO Sponsor VALUES (101, 'Nike');
+INSERT INTO Sponsor VALUES (102, 'Adidas');
+INSERT INTO Sponsor VALUES (103, 'Butterfly');
+INSERT INTO Sponsor VALUES (104, 'Stiga');
+INSERT INTO Sponsor VALUES (105, 'Joola');
+INSERT INTO Sponsor VALUES (106, 'Tibhar');
+INSERT INTO Sponsor VALUES (107, 'aBiBas');
+
+-- PALETA
+INSERT INTO Paleta VALUES (1, 1, 'Carbon', 'Tenergy 05', 'Tenergy 05 FX');
+INSERT INTO Paleta VALUES (2, 2, 'Allround', 'Mark V', 'Mark V');
+INSERT INTO Paleta VALUES (3, 3, 'Offensive', 'Dignics 09C', 'Dignics 05');
+INSERT INTO Paleta VALUES (4, 4, 'Defensive', 'Feint Long II', 'Sriver');
+INSERT INTO Paleta VALUES (5, 5, 'Carbon', 'Tenergy 64', 'Tenergy 80');
+
+-- MECI
+INSERT INTO Meci VALUES (1, 1, 2, 1, 1, 1, TO_DATE('11-03-2025','DD-MM-YYYY'));
+INSERT INTO Meci VALUES (2, 3, 4, 1, 2, 1, TO_DATE('12-03-2025','DD-MM-YYYY'));
+INSERT INTO Meci VALUES (3, 2, 3, 2, 3, 2, TO_DATE('02-04-2025','DD-MM-YYYY'));
+INSERT INTO Meci VALUES (4, 4, 5, 3, 4, 3, TO_DATE('22-05-2025','DD-MM-YYYY'));
+INSERT INTO Meci VALUES (5, 1, 5, 4, 5, 4, TO_DATE('12-06-2025','DD-MM-YYYY'));
+
+-- CONTRACT_ANTRENOR
+INSERT INTO Contract_antrenor VALUES (1, 1, SYSDATE-300, SYSDATE-200);
+INSERT INTO Contract_antrenor VALUES (1, 2, SYSDATE-250, SYSDATE-150);
+INSERT INTO Contract_antrenor VALUES (2, 2, SYSDATE-200, SYSDATE-100);
+INSERT INTO Contract_antrenor VALUES (2, 3, SYSDATE-220, SYSDATE-120);
+INSERT INTO Contract_antrenor VALUES (3, 3, SYSDATE-210, SYSDATE-110);
+INSERT INTO Contract_antrenor VALUES (3, 4, SYSDATE-180, SYSDATE-80);
+INSERT INTO Contract_antrenor VALUES (4, 4, SYSDATE-160, SYSDATE-60);
+INSERT INTO Contract_antrenor VALUES (4, 5, SYSDATE-140, SYSDATE-40);
+INSERT INTO Contract_antrenor VALUES (5, 1, SYSDATE-130, SYSDATE-30);
+INSERT INTO Contract_antrenor VALUES (5, 5, SYSDATE-120, SYSDATE-20);
+
+-- CONTRACT_SPONSORIZARE
+INSERT INTO Contract_sponsorizare VALUES (1, 101, 10000);
+INSERT INTO Contract_sponsorizare VALUES (1, 102, 8000);
+INSERT INTO Contract_sponsorizare VALUES (1, 103, 9000);
+INSERT INTO Contract_sponsorizare VALUES (1, 104, 7000);
+INSERT INTO Contract_sponsorizare VALUES (1, 105, 6000);
+INSERT INTO Contract_sponsorizare VALUES (2, 101, 5000);
+INSERT INTO Contract_sponsorizare VALUES (2, 102, 5500);
+INSERT INTO Contract_sponsorizare VALUES (3, 103, 6000);
+INSERT INTO Contract_sponsorizare VALUES (4, 104, 6500);
+INSERT INTO Contract_sponsorizare VALUES (5, 105, 7000);
+
+
+
+
+--ex 6
+
+CREATE OR REPLACE PROCEDURE analiza_sponsorizari_turneu (
+    p_turneu_id IN Turneu.turneu_id%TYPE
+) IS
+    -- Varray lista sponsorilor 
+    TYPE t_sponsori_varray IS VARRAY(1000) OF Sponsor.nume%TYPE;
+    v_sponsori t_sponsori_varray;
+
+    -- Nested table valorile sponsorizarilor
+    TYPE t_sume_nt IS TABLE OF Contract_sponsorizare.suma%TYPE;
+    v_sume t_sume_nt;
+
+    -- Index by table total sponsorizari
+    TYPE t_total_sponsori IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
+    v_total t_total_sponsori;
+
+BEGIN
+    FOR j IN (
+        SELECT DISTINCT j.jucator_id, j.nume, j.prenume
+        FROM Jucator j
+        JOIN Meci m ON j.jucator_id IN (m.jucator_unu, m.jucator_doi)
+        WHERE m.turneu_id = p_turneu_id
+    ) LOOP
+
+        v_sponsori := t_sponsori_varray();
+        v_sume     := t_sume_nt();
+        v_total(j.jucator_id) := 0;
+
+        FOR s IN (
+            SELECT sp.nume AS nume_sponsor, cs.suma
+            FROM Contract_sponsorizare cs
+            JOIN Sponsor sp ON cs.sponsor_id = sp.sponsor_id
+            WHERE cs.jucator_id = j.jucator_id
+        ) LOOP
+            IF v_sponsori.COUNT < 5 THEN
+                v_sponsori.EXTEND;
+                v_sponsori(v_sponsori.COUNT) := s.nume_sponsor;
+            END IF;
+
+            v_sume.EXTEND;
+            v_sume(v_sume.COUNT) := s.suma;
+
+            v_total(j.jucator_id) :=
+                v_total(j.jucator_id) + s.suma;
+        END LOOP;
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Jucator: ' || j.nume || ' ' || j.prenume
+        );
+        DBMS_OUTPUT.PUT_LINE(
+            '  Total sponsorizari: ' || v_total(j.jucator_id)
+        );
+    END LOOP;
+END;
+/
+
+
+
+SET SERVEROUTPUT ON
+
+BEGIN
+    analiza_sponsorizari_turneu(1);
+END;
+/
+
+BEGIN
+    analiza_sponsorizari_turneu(3);
+END;
+/
+
+BEGIN
+    analiza_sponsorizari_turneu(5);
+END;
+/
+
+
+
+
+
+
+
+--ex 7
+CREATE OR REPLACE PROCEDURE afisare_meciuri_turnee
+IS
+    -- Cursor explicit: toate turneele
+    CURSOR c_turnee IS
+        SELECT turneu_id, nume_turneu
+        FROM Turneu;
+
+    -- Cursor parametrizat: meciurile unui turneu
+    CURSOR c_meciuri (p_turneu_id Turneu.turneu_id%TYPE) IS
+        SELECT m.meci_id,
+               j1.nume || ' ' || j1.prenume AS jucator_1,
+               j2.nume || ' ' || j2.prenume AS jucator_2,
+               a.nume  || ' ' || a.prenume  AS arbitru
+        FROM Meci m
+        JOIN Jucator j1 ON m.jucator_unu = j1.jucator_id
+        JOIN Jucator j2 ON m.jucator_doi = j2.jucator_id
+        JOIN Arbitru a  ON m.arbitru_id  = a.arbitru_id
+        WHERE m.turneu_id = p_turneu_id;
+
+BEGIN
+    FOR t IN c_turnee LOOP
+    DBMS_OUTPUT.PUT_LINE('');
+        DBMS_OUTPUT.PUT_LINE('Turneu: ' || t.nume_turneu);
+
+        FOR m IN c_meciuri(t.turneu_id) LOOP
+            DBMS_OUTPUT.PUT_LINE(
+                '  Meci id' || m.meci_id || ': ' ||
+                m.jucator_1 || ' vs ' || m.jucator_2 ||
+                ' | Arbitru: ' || m.arbitru
+            );
+        END LOOP;
+    END LOOP;
+END;
+/
+
+
+
+
+SET SERVEROUTPUT ON
+
+BEGIN
+    afisare_meciuri_turnee;
+END;
+/
+
+
+
+
+
+
+--ex 8
+CREATE OR REPLACE FUNCTION capacitate_maxima_sala_jucator_turneu (
+    p_jucator_id IN Jucator.jucator_id%TYPE,
+    p_turneu_id  IN Turneu.turneu_id%TYPE
+) RETURN NUMBER
+IS
+    v_capacitate Sala.capacitate%TYPE;
+    v_dummy      NUMBER(1);
+
+    -- Exceptii proprii
+    e_jucator_inexistent EXCEPTION;
+    e_turneu_inexistent  EXCEPTION;
+BEGIN
+    -- Verificare existenta jucator
+    BEGIN
+        SELECT 1
+        INTO v_dummy
+        FROM Jucator
+        WHERE jucator_id = p_jucator_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE e_jucator_inexistent;
+    END;
+
+    -- Verificare existenta turneu
+    BEGIN
+        SELECT 1
+        INTO v_dummy
+        FROM Turneu
+        WHERE turneu_id = p_turneu_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE e_turneu_inexistent;
+    END;
+
+    SELECT MAX(s.capacitate)
+    INTO v_capacitate
+    FROM Meci m
+    JOIN Sala s   ON m.sala_id   = s.sala_id
+    JOIN Turneu t ON m.turneu_id = t.turneu_id
+    WHERE t.turneu_id = p_turneu_id
+      AND (m.jucator_unu = p_jucator_id
+           OR m.jucator_doi = p_jucator_id);
+
+    IF v_capacitate IS NULL THEN
+        RAISE NO_DATA_FOUND;
+    END IF;
+
+    RETURN v_capacitate;
+
+EXCEPTION
+    WHEN e_jucator_inexistent THEN
+        RAISE_APPLICATION_ERROR(
+            -20012,
+            'Jucatorul specificat nu exista.'
+        );
+
+    WHEN e_turneu_inexistent THEN
+        RAISE_APPLICATION_ERROR(
+            -20013,
+            'Turneul specificat nu exista.'
+        );
+
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(
+            -20014,
+            'Jucatorul nu a disputat niciun meci in turneul specificat.'
+        );
+
+    WHEN TOO_MANY_ROWS THEN
+        RAISE_APPLICATION_ERROR(
+            -20015,
+            'Exista mai multe valori posibile pentru capacitatea salii.'
+        );
+
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(
+            -20016,
+            'Eroare neasteptata: ' || SQLERRM
+        );
+END;
+/
+
+
+
+
+SET SERVEROUTPUT ON
+
+-- jucator si turneu valide
+SELECT capacitate_maxima_sala_jucator_turneu(1, 1) FROM dual;
+
+-- jucator inexistent
+SELECT capacitate_maxima_sala_jucator_turneu(99, 1) FROM dual;
+
+-- turneu inexistent
+SELECT capacitate_maxima_sala_jucator_turneu(1, 99) FROM dual;
+
+
+
+
+
+
+--ex 9
+
+CREATE OR REPLACE PROCEDURE detalii_meciuri_jucator_turneu (
+    p_jucator_id IN Jucator.jucator_id%TYPE,
+    p_turneu_id  IN Turneu.turneu_id%TYPE
+) IS
+    -- Exceptii proprii
+    e_jucator_inexistent EXCEPTION;
+    e_fara_meciuri       EXCEPTION;
+
+    v_exista NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_exista
+    FROM Jucator
+    WHERE jucator_id = p_jucator_id;
+
+    IF v_exista = 0 THEN
+        RAISE e_jucator_inexistent;
+    END IF;
+
+    v_exista := 0;
+
+    FOR r IN (
+        SELECT
+            t.nume_turneu,
+            s.nume_sala,
+            a.nume || ' ' || a.prenume AS arbitru,
+            CASE
+                WHEN m.jucator_unu = p_jucator_id
+                THEN j2.nume || ' ' || j2.prenume
+                ELSE j1.nume || ' ' || j1.prenume
+            END AS adversar
+        FROM Meci m
+        JOIN Turneu t ON m.turneu_id = t.turneu_id
+        JOIN Sala s   ON m.sala_id   = s.sala_id
+        JOIN Arbitru a ON m.arbitru_id = a.arbitru_id
+        JOIN Jucator j1 ON m.jucator_unu = j1.jucator_id
+        JOIN Jucator j2 ON m.jucator_doi = j2.jucator_id
+        WHERE m.turneu_id = p_turneu_id
+          AND (m.jucator_unu = p_jucator_id
+               OR m.jucator_doi = p_jucator_id)
+    ) LOOP
+        v_exista := 1;
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Turneu: ' || r.nume_turneu ||
+            ' | Sala: ' || r.nume_sala ||
+            ' | Arbitru: ' || r.arbitru ||
+            ' | Adversar: ' || r.adversar
+        );
+    END LOOP;
+
+    IF v_exista = 0 THEN
+        RAISE e_fara_meciuri;
+    END IF;
+
+EXCEPTION
+    WHEN e_jucator_inexistent THEN
+        DBMS_OUTPUT.PUT_LINE(
+            'Eroare: Jucatorul specificat nu exista.'
+        );
+
+    WHEN e_fara_meciuri THEN
+        DBMS_OUTPUT.PUT_LINE(
+            'Eroare: Jucatorul nu are niciun meci in turneul specificat.'
+        );
+
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE(
+            'Eroare neasteptata: ' || SQLERRM
+        );
+END;
+/
+
+
+SET SERVEROUTPUT ON
+
+BEGIN
+    detalii_meciuri_jucator_turneu(1, 1);
+END;
+/
+
+BEGIN
+    detalii_meciuri_jucator_turneu(99, 1);
+END;
+/
+
+BEGIN
+    detalii_meciuri_jucator_turneu(5, 2);
+END;
+/
+
+
+
+
+
+--ex 10
+--un jucator nu are voie mai multi de 5 sponsori
+CREATE OR REPLACE TRIGGER trg_limitare_sponsori_stmt
+AFTER INSERT OR UPDATE ON Contract_sponsorizare
+DECLARE
+    c_max_sponsori CONSTANT NUMBER := 5;
+    v_count        NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM (
+        SELECT jucator_id
+        FROM Contract_sponsorizare
+        GROUP BY jucator_id
+        HAVING COUNT(*) > c_max_sponsori
+    );
+
+    IF v_count > 0 THEN
+        RAISE_APPLICATION_ERROR(
+            -20005,
+            'Eroare: Un jucator nu poate avea mai mult de '
+            || c_max_sponsori
+            || ' contracte de sponsorizare.'
+        );
+    END IF;
+END;
+/
+
+select * from sponsor;
+select * from jucator;
+select * from contract_sponsorizare;
+
+insert into jucator values( 100, 'Stefan', 'B', 'Macedonia');
+
+
+
+
+
+ INSERT ALL
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 101, 15)
+    INTO contract_sponsorizare(jucator_id, sponsor_id, suma) VALUES (100, 102, 15)
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 103, 15)
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 104, 15)
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 105, 15)
+    INTO contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (100, 106, 15)
+SELECT * FROM dual;
+
+
+
+--ex 11
+--Sponsorul trebuie sa dea o val pozitiva
+CREATE OR REPLACE TRIGGER trg_ValideazaSumaSponsor
+BEFORE INSERT OR UPDATE ON Contract_sponsorizare
+FOR EACH ROW
+BEGIN
+    IF :NEW.suma <= 0 THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Eroare: Suma sponsorizarii trebuie sa fie mai mare decat 0.');
+    END IF;
+END;
+/
+
+select * from contract_sponsorizare;
+
+-- INSERT care MERGE
+INSERT INTO Contract_sponsorizare (jucator_id, sponsor_id, suma)
+VALUES (2, 105, 500);
+
+
+-- UPDATE care NU MERGE
+UPDATE Contract_sponsorizare
+SET suma = -100
+WHERE jucator_id = 1
+  AND sponsor_id = 101;
+
+
+-- INSERT care NU MERGE
+INSERT INTO Contract_sponsorizare (jucator_id, sponsor_id, suma)
+VALUES (2, 102, -1);
+
+
+-- MULTI-INSERT care NU MERGE
+INSERT ALL
+    INTO Contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (3, 105, 200)
+    INTO Contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (3, 104, -50)
+SELECT * FROM dual;
+select * from Contract_sponsorizare ;
+
+--ex 12
+-- tabela cu contractele de sponsorizare nu poate fi stearsa
+CREATE OR REPLACE TRIGGER trg_drop_Contract_Sponsorizare
+BEFORE DROP ON SCHEMA
+BEGIN
+    IF ORA_DICT_OBJ_TYPE = 'TABLE'
+        AND ORA_DICT_OBJ_NAME = 'CONTRACT_SPONSORIZARE'
+    THEN
+        RAISE_APPLICATION_ERROR(
+            -20006,
+            'Eroare: Tabela Contract_Sponsorizare nu poate fi stearsa.'
+        );
+        
+    END IF;
+END;
+/
+
+drop table Contract_Sponsorizare;
+
+
+drop trigger trg_drop_Contract_Sponsorizare;
+
+
+--13
+CREATE OR REPLACE PACKAGE pkg_gestiune_turnee IS
+
+    TYPE t_sume_nt IS TABLE OF NUMBER;
+
+    TYPE t_meci_rec IS RECORD (
+        adversar VARCHAR2(100),
+        arbitru  VARCHAR2(100),
+        sala     VARCHAR2(100)
+    );
+
+    TYPE t_meciuri_nt IS TABLE OF t_meci_rec;
+
+    FUNCTION exista_jucator (
+        p_jucator_id IN Jucator.jucator_id%TYPE
+    ) RETURN BOOLEAN;
+
+    FUNCTION total_sponsorizari_jucator (
+        p_jucator_id IN Jucator.jucator_id%TYPE
+    ) RETURN NUMBER;
+
+    PROCEDURE afisare_sponsorizari (
+        p_jucator_id IN Jucator.jucator_id%TYPE
+    );
+
+    PROCEDURE afisare_meciuri_turneu (
+        p_jucator_id IN Jucator.jucator_id%TYPE,
+        p_turneu_id  IN Turneu.turneu_id%TYPE
+    );
+
+END pkg_gestiune_turnee;
+/
+
+
+CREATE OR REPLACE PACKAGE BODY pkg_gestiune_turnee IS
+
+    FUNCTION exista_jucator (
+        p_jucator_id IN Jucator.jucator_id%TYPE
+    ) RETURN BOOLEAN IS
+        v_count NUMBER;
+    BEGIN
+        SELECT COUNT(*)
+        INTO v_count
+        FROM Jucator
+        WHERE jucator_id = p_jucator_id;
+
+        RETURN v_count > 0;
+    END exista_jucator;
+
+    FUNCTION total_sponsorizari_jucator (
+        p_jucator_id IN Jucator.jucator_id%TYPE
+    ) RETURN NUMBER IS
+        v_total NUMBER := 0;
+        v_sume  t_sume_nt;
+    BEGIN
+        SELECT suma
+        BULK COLLECT INTO v_sume
+        FROM Contract_sponsorizare
+        WHERE jucator_id = p_jucator_id;
+
+        FOR i IN 1 .. v_sume.COUNT LOOP
+            v_total := v_total + v_sume(i);
+        END LOOP;
+
+        RETURN v_total;
+    END total_sponsorizari_jucator;
+
+    PROCEDURE afisare_sponsorizari (
+        p_jucator_id IN Jucator.jucator_id%TYPE
+    ) IS
+    BEGIN
+        IF NOT exista_jucator(p_jucator_id) THEN
+            DBMS_OUTPUT.PUT_LINE('Jucator inexistent.');
+            RETURN;
+        END IF;
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Total sponsorizari: ' ||
+            total_sponsorizari_jucator(p_jucator_id)
+        );
+    END afisare_sponsorizari;
+
+    PROCEDURE afisare_meciuri_turneu (
+        p_jucator_id IN Jucator.jucator_id%TYPE,
+        p_turneu_id  IN Turneu.turneu_id%TYPE
+    ) IS
+        v_meciuri t_meciuri_nt := t_meciuri_nt();
+    BEGIN
+        SELECT
+            CASE
+                WHEN m.jucator_unu = p_jucator_id
+                THEN j2.nume || ' ' || j2.prenume
+                ELSE j1.nume || ' ' || j1.prenume
+            END,
+            a.nume || ' ' || a.prenume,
+            s.nume_sala
+        BULK COLLECT INTO v_meciuri
+        FROM Meci m
+        JOIN Jucator j1 ON m.jucator_unu = j1.jucator_id
+        JOIN Jucator j2 ON m.jucator_doi = j2.jucator_id
+        JOIN Arbitru a ON m.arbitru_id = a.arbitru_id
+        JOIN Sala s ON m.sala_id = s.sala_id
+        WHERE m.turneu_id = p_turneu_id
+          AND (m.jucator_unu = p_jucator_id
+               OR m.jucator_doi = p_jucator_id);
+
+        FOR i IN 1 .. v_meciuri.COUNT LOOP
+            DBMS_OUTPUT.PUT_LINE(
+                'Adversar: ' || v_meciuri(i).adversar ||
+                ' | Arbitru: ' || v_meciuri(i).arbitru ||
+                ' | Sala: ' || v_meciuri(i).sala
+            );
+        END LOOP;
+    END afisare_meciuri_turneu;
+
+END pkg_gestiune_turnee;
+/
+
+
+SET SERVEROUTPUT ON
+
+BEGIN
+    pkg_gestiune_turnee.afisare_sponsorizari(1);
+    pkg_gestiune_turnee.afisare_meciuri_turneu(1, 5);
+END;
+/
+
+
+
+
+--turneul trebuie sa aiba data valida
+CREATE OR REPLACE TRIGGER trg_ValideazaDateTurneu
+BEFORE INSERT OR UPDATE ON Turneu
+FOR EACH ROW
+BEGIN
+    IF :NEW.data_final < :NEW.data_inceput THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Eroare: Data de final nu poate fi inainte de data de inceput.');
+    END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_contract_antrenor_perioada
+BEFORE INSERT OR UPDATE ON Contract_antrenor
+FOR EACH ROW
+BEGIN
+    IF :NEW.data_inceput >= :NEW.data_final THEN
+        RAISE_APPLICATION_ERROR(
+            -20002,
+            'Data de inceput a contractului trebuie sa fie anterioara datei de final.'
+        );
+    END IF;
+END;
+/
+
+
+CREATE OR REPLACE TRIGGER trg_EvitaAutoMeci
+BEFORE INSERT OR UPDATE ON Meci
+FOR EACH ROW
+BEGIN
+    IF :NEW.jucator_unu = :NEW.jucator_doi THEN
+        RAISE_APPLICATION_ERROR(-20004, 'Eroare: Un jucator nu poate juca impotriva lui insusi.');
+    END IF;
+END;
+/
+
+
+-- sa fie in interval
+CREATE OR REPLACE TRIGGER Trg_Meciuri
+AFTER INSERT OR UPDATE ON meci
+FOR EACH ROW
+DECLARE
+    v_turneu_start DATE;
+    v_turneu_end DATE;
+BEGIN
+    SELECT data_inceput, data_final INTO v_turneu_start, v_turneu_end
+    FROM turneu
+    WHERE turneu_id = :NEW.turneu_id;
+    
+    IF :NEW.data >= v_turneu_start AND :NEW.data < v_turneu_end THEN
+        RAISE_APPLICATION_ERROR(-20010, 'Eroare: Meciul trebuie sa fie intre data de inceput si final a turneului.');
+    END IF;
+END;
+/
+
+select * from turneu;
+select* from meci;
+INSERT INTO Meci
+VALUES (
+    100,1,2,1,1,1,
+    TO_DATE('20-03-2025','DD-MM-YYYY')
+);
+
+
+UPDATE Meci
+SET data = TO_DATE('12-03-2025','DD-MM-YYYY')
+WHERE meci_id = 100;
+
+
+INSERT INTO Meci
+VALUES (
+    101,
+    3,
+    4,
+    1,
+    1,
+    1,
+    TO_DATE('11-03-2025','DD-MM-YYYY')
+);
+
+
+INSERT ALL
+    INTO Meci VALUES (
+        102,
+        1,
+        3,
+        1,
+        1,
+        1,
+        TO_DATE('09-03-2025','DD-MM-YYYY')
+    )
+    INTO Meci VALUES (
+        103,
+        2,
+        4,
+        1,
+        1,
+        1,
+        TO_DATE('12-03-2025','DD-MM-YYYY')
+    )
+SELECT * FROM dual;
+
+
+
+-- sa nu se modifice prost datele la turneu
+CREATE OR REPLACE TRIGGER TRG_TURNEU
+AFTER INSERT OR UPDATE ON TURNEU
+FOR EACH ROW
+DECLARE
+    ct NUMBER(10);
+BEGIN
+    select COUNT(*) INTO ct
+    from meci
+    where meci.turneu_id = :NEW.TURNEU_ID
+    and ( :NEW.data_inceput > data or :new.data_final < data );
+    
+    IF ct > 0  THEN
+        RAISE_APPLICATION_ERROR(-20011, 'Ai meciuri care ar iesi din intervalul turneului.');
+    END IF;
+END;
+/
+
+
+--  INSERT care MERGE
+INSERT INTO Turneu
+VALUES (
+    10,
+    'Turneu Test Valid',
+    TO_DATE('01-08-2025','DD-MM-YYYY'),
+    TO_DATE('05-08-2025','DD-MM-YYYY')
+);
+
+
+--  UPDATE care NU MERGE
+UPDATE Turneu
+SET data_inceput = TO_DATE('12-03-2025','DD-MM-YYYY'),
+    data_final   = TO_DATE('13-03-2025','DD-MM-YYYY')
+WHERE turneu_id = 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+select * from Contract_sponsorizare;
+drop table Contract_sponsorizare;
+
+select * from turneu;
+
+
+
+
+INSERT INTO Turneu (turneu_id, nume_turneu, data_inceput, data_final)
+VALUES (
+    2, 
+    'Campionatul Judetean Vaslui de Tenis de Masa', 
+    TO_DATE('10-03-2025', 'DD-MM-YYYY'),
+    TO_DATE('15-03-1999', 'DD-MM-YYYY')
+);
+
+
+
+
+INSERT INTO Contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (1, 103, -5000);
+
+
+select * from jucator;
+select * from sponsor;
+select * from Contract_sponsorizare;
+
+
+
+INSERT INTO Contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (1, 104, 5000);
+INSERT INTO Contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (1, 105, 5000);
+
+select * from contract_sponsorizare;
+INSERT INTO Contract_sponsorizare (jucator_id, sponsor_id, suma) VALUES (1, 106, 5000);
+
+
+
+
+
+select * from antrenor;
+
+insert into antrenor values(100, 'Gabi', 'Bl', 'Brazilia');

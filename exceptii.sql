@@ -1,11 +1,6 @@
 
 
--- S? se determine capacitatea maxim? a s?lii �n care a jucat un juc?tor �ntr-un anumit turneu.
 --ex 8
-
---S? se creeze un subprogram stocat independent de tip func?ie care, pentru un juc?tor ?i un turneu date ca parametri, s? determine capacitatea maxim? a s?lii �n care juc?torul respectiv a disputat meciuri �n cadrul acelui turneu. Func?ia va utiliza �ntr-o singur? comand? SQL trei tabele din baza de date ?i va trata excep?iile predefinite NO_DATA_FOUND ?i TOO_MANY_ROWS.
---(TOO_MANY_ROWS va fi tratat? teoretic, chiar dac? nu apare logic � este acceptat ?i des �nt�lnit la curs)
-
 CREATE OR REPLACE FUNCTION capacitate_maxima_sala_jucator_turneu (
     p_jucator_id IN Jucator.jucator_id%TYPE,
     p_turneu_id  IN Turneu.turneu_id%TYPE
@@ -108,7 +103,6 @@ SELECT capacitate_maxima_sala_jucator_turneu(1, 99) FROM dual;
 
 
 --ex 9
---S? se creeze un subprogram stocat independent de tip procedur? care, pentru un juc?tor ?i un turneu date ca parametri, s? afi?eze detalii despre meciurile disputate de juc?tor �n cadrul turneului, incluz�nd numele turneului, sala �n care s-a jucat, arbitrul ?i adversarul. Procedura va utiliza �ntr-o singur? comand? SQL cinci tabele din baza de date ?i va defini cel pu?in dou? excep?ii proprii pentru tratarea situa?iilor �n care juc?torul nu exist? sau juc?torul nu a disputat niciun meci �n turneul specificat. Procedura va fi apelat? astfel �nc�t s? fie eviden?iate toate cazurile tratate.
 
 CREATE OR REPLACE PROCEDURE detalii_meciuri_jucator_turneu (
     p_jucator_id IN Jucator.jucator_id%TYPE,

@@ -121,7 +121,7 @@ END;
 /
 
 
--- TEST 1: INSERT care MERGE
+--  INSERT care MERGE
 INSERT INTO Turneu
 VALUES (
     10,
@@ -131,7 +131,7 @@ VALUES (
 );
 
 
--- TEST 2: UPDATE care NU MERGE
+--  UPDATE care NU MERGE
 UPDATE Turneu
 SET data_inceput = TO_DATE('12-03-2025','DD-MM-YYYY'),
     data_final   = TO_DATE('13-03-2025','DD-MM-YYYY')

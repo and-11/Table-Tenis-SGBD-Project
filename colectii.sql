@@ -12,7 +12,7 @@ CREATE OR REPLACE PROCEDURE analiza_sponsorizari_turneu (
     TYPE t_sume_nt IS TABLE OF Contract_sponsorizare.suma%TYPE;
     v_sume t_sume_nt;
 
-    -- Associative Array total sponsorizari
+    -- Index by table total sponsorizari
     TYPE t_total_sponsori IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
     v_total t_total_sponsori;
 
